@@ -10,8 +10,8 @@ datasource db {
 
 model Users {
   id               String            @id @default(auto()) @map("_id") @db.ObjectId
-  username         String
-  email            String
+  username         String            @unique
+  email            String            @unique
   password         String
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -20,6 +20,7 @@ model Users {
   requestedBooks   ExchangeRequest[] @relation("RequesterRequests")
   ownedBooks       ExchangeRequest[] @relation("OwnerRequests")
 }
+
 
 model Book {
   id               String            @id @default(auto()) @map("_id") @db.ObjectId
