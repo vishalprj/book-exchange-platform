@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,4 +5,61 @@ generator client {
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+
+model Users {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  username         String
+  email            String
+  password         String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  Books            Book[]            @relation("UserBooks")
+  WishList         WishList[]
+  requestedBooks   ExchangeRequest[] @relation("RequesterRequests")
+  ownedBooks       ExchangeRequest[] @relation("OwnerRequests")
+}
+
+model Book {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String            @db.ObjectId
+  title            String
+  author           String
+  genre            String
+  status           String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  user             Users             @relation("UserBooks", fields: [userId], references: [id])
+  WishList         WishList[]
+  requestedIn      ExchangeRequest[] @relation("RequestedBooks")
+  offeredIn        ExchangeRequest[] @relation("OfferedBooks")
+}
+
+model WishList {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String            @db.ObjectId
+  bookId           String            @db.ObjectId
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  user             Users             @relation(fields: [userId], references: [id])
+  book             Book              @relation(fields: [bookId], references: [id])
+}
+
+model ExchangeRequest {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  requesterId      String            @db.ObjectId
+  requestedBookId  String            @db.ObjectId
+  ownerId          String            @db.ObjectId
+  offeredBookId    String            @db.ObjectId
+  status           String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  requester        Users             @relation("RequesterRequests", fields: [requesterId], references: [id])
+  requestedBook    Book              @relation("RequestedBooks", fields: [requestedBookId], references: [id])
+  owner            Users             @relation("OwnerRequests", fields: [ownerId], references: [id])
+  offeredBook      Book              @relation("OfferedBooks", fields: [offeredBookId], references: [id])
 }
