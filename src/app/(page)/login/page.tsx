@@ -1,4 +1,4 @@
-import Login from "../view/login";
+import Login from "@/app/view/login";
 
 const Page = () => {
   return <Login />;

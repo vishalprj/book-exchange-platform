@@ -1,12 +1,11 @@
 import axios from "axios";
 
-type payloadType = {};
 // login user
 export const loginUser = (data: any) => {
-  return axios.post("/api/login", data);
+  return axios.post("/api/users/login", data);
 };
 
 // signup user
 export const signUpUser = (data: any) => {
-  return axios.post("/api/signup", data);
+  return axios.post("/api/users/signup", data);
 };
