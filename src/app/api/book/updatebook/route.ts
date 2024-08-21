@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/prisma";
 
 export async function PUT(request: NextRequest, respond: NextResponse) {
-  const { id, title, author, genre, status } = await request.json();
+  const { id, title, author, genre } = await request.json();
 
-  if (!id || !title || !author || !genre || !status) {
+  if (!id || !title || !author || !genre) {
     return NextResponse.json(
       { error: "All fields are required" },
       { status: 400 }
@@ -17,7 +17,6 @@ export async function PUT(request: NextRequest, respond: NextResponse) {
         title: title,
         author: author,
         genre: genre,
-        status: status,
       },
     });
     return NextResponse.json(
