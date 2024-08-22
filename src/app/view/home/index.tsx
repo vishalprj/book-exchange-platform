@@ -5,12 +5,16 @@ import { useState } from "react";
 import styles from "./home.module.css";
 import { useForm } from "react-hook-form";
 import { useAddBook, useGetBook } from "@/app/store/queries";
+
 const HomePage = () => {
-  const { register, handleSubmit } = useForm();
-  const { data } = useGetBook();
+  const { register, handleSubmit, reset } = useForm();
+  const userId = localStorage.getItem("userId");
+  const { data } = useGetBook(userId);
   const { mutate: addBook } = useAddBook();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [genreFilter, setGenreFilter] = useState("all");
+  const [authorFilter, setAuthorFilter] = useState("");
 
   const handleAddNewBookClick = () => {
     setIsModalOpen(true);
@@ -20,14 +24,34 @@ const HomePage = () => {
     setIsModalOpen(false);
   };
 
+  const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setGenreFilter(e.target.value);
+  };
+
+  const handleAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAuthorFilter(e.target.value);
+  };
+
+  const filteredBooks = (data || []).filter((book) => {
+    const genreMatch =
+      genreFilter === "all" ||
+      book.genre.toLowerCase() === genreFilter.toLowerCase();
+    const authorMatch = book.author
+      .toLowerCase()
+      .includes(authorFilter.toLowerCase());
+    return genreMatch && authorMatch;
+  });
+
   const onSubmit = async (data: any) => {
     const addData = {
-    ...data,
-      userId: "66c4cb1d38bfb1ed8d1b8ab6",
+      ...data,
+      userId,
     };
     addBook(addData);
     setIsModalOpen(false);
+    reset();
   };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="p-4 bg-gray-800 flex justify-between items-center">
@@ -42,14 +66,16 @@ const HomePage = () => {
         </div>
       </nav>
 
-      {/* Content */}
       <main className="p-8">
         <h1 className="text-4xl mb-8">Browse Books</h1>
 
-        {/* Filters */}
         <div className="mb-4">
           <label className="mr-2">Genre:</label>
-          <select className="p-2 text-black">
+          <select
+            className="p-2 text-black"
+            value={genreFilter}
+            onChange={handleGenreChange}
+          >
             <option value="all">All</option>
             <option value="fiction">Fiction</option>
             <option value="non-fiction">Non-Fiction</option>
@@ -62,6 +88,8 @@ const HomePage = () => {
             className="p-2 text-black"
             type="text"
             placeholder="Author Name"
+            value={authorFilter}
+            onChange={handleAuthorChange}
           />
 
           <button
@@ -73,11 +101,10 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-6">
-          {data?.map((book) => <Card key={book.id} book={book} />)}
+          {filteredBooks?.map((book) => <Card key={book.id} book={book} />)}
         </div>
       </main>
 
-      {/* Add Book Modal */}
       <Modal show={isModalOpen} onClose={handleCloseModal}>
         <h2 className="text-2xl mb-4">Add New Book</h2>
         <form onSubmit={handleSubmit(onSubmit)}>

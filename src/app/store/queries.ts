@@ -12,17 +12,17 @@ export const signUpUser = (data: any) => {
   return axios.post("/api/users/signup", data);
 };
 
-export const fetchAllBook = async () => {
-  const res = await axios.get("/api/book/book");
+export const fetchAllBook = async (userId: any) => {
+  const res = await axios.post("/api/book/listbook", { userId });
   if (!res.data) {
     throw new Error("Response was not ok");
   }
-  return res.data.data;
+  return res.data;
 };
 
 //  get all books
-export const useGetBook = () => {
-  return useQuery(["books"], fetchAllBook);
+export const useGetBook = (userId: any) => {
+  return useQuery(["books", userId], () => fetchAllBook(userId));
 };
 
 // Add book
@@ -34,10 +34,11 @@ export const useAddBook = () => {
   const queryClient = useQueryClient();
   return useMutation(addBook, {
     onSuccess: () => {
+      toast.success("Book added successfully");
       queryClient.invalidateQueries("books");
     },
     onError: () => {
-      console.log("error");
+      toast.error("Failed to added book");
     },
   });
 };

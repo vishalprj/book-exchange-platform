@@ -14,6 +14,7 @@ const Login = () => {
       const response = await loginUser(data);
       if (response.data) {
         router.push("/");
+        localStorage.setItem("userId", response.data?.data?.id);
       }
     } catch (error) {
       console.log(error);
