@@ -80,3 +80,18 @@ export const useDeleteBook = () => {
     },
   });
 };
+
+// list other user all books
+
+export const fetchOtherUserAllBook = async (userId: any) => {
+  const res = await axios.post("/api/book/otherlistbook", { userId });
+  if (!res.data) {
+    throw new Error("Something went wrong");
+  }
+  return res.data;
+};
+
+//  get all books
+export const useUsersAllBooks = (userId: any) => {
+  return useQuery(["books", userId], () => fetchOtherUserAllBook(userId));
+};

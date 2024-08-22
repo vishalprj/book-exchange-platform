@@ -54,18 +54,6 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <nav className="p-4 bg-gray-800 flex justify-between items-center">
-        <div>
-          <h1 className="text-1xl">BOOKS-STORE</h1>
-        </div>
-        <div className="space-x-4">
-          <button className="hover:text-gray-400">List Book</button>
-          <button className="hover:text-gray-400">Matching</button>
-          <button className="hover:text-gray-400">Exchange Request</button>
-          <button className="hover:text-red-400">Logout</button>
-        </div>
-      </nav>
-
       <main className="p-8">
         <h1 className="text-4xl mb-8">Browse Books</h1>
 

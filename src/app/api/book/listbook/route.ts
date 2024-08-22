@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(userWithBooks.Books, { status: 200 });
+    return NextResponse.json(userWithBooks?.Books, { status: 200 });
   } catch (error) {
     console.error("Error fetching user with books:", error);
     return NextResponse.json(
