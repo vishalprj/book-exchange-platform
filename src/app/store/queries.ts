@@ -12,6 +12,11 @@ export const signUpUser = (data: any) => {
   return axios.post("/api/users/signup", data);
 };
 
+// logout user
+export const logoutUser = () => {
+  return axios.get("/api/users/logout");
+};
+
 export const fetchAllBook = async (userId: any) => {
   const res = await axios.post("/api/book/listbook", { userId });
   if (!res.data) {
@@ -23,6 +28,12 @@ export const fetchAllBook = async (userId: any) => {
 //  get all books
 export const useGetBook = (userId: any) => {
   return useQuery(["books", userId], () => fetchAllBook(userId));
+};
+
+// list all books for user only
+export const listBook = async (userId: any) => {
+  const res = await axios.post("/api/book/listbook", { userId });
+  return res.data;
 };
 
 // Add book
@@ -94,4 +105,10 @@ export const fetchOtherUserAllBook = async (userId: any) => {
 //  get all books
 export const useUsersAllBooks = (userId: any) => {
   return useQuery(["books", userId], () => fetchOtherUserAllBook(userId));
+};
+
+// exchange list
+export const fetchExchangeRequest = async (userId: any) => {
+  const res = await axios.post("/api/book/exchangelist", { userId });
+  return res.data;
 };

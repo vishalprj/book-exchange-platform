@@ -6,7 +6,6 @@ import { useGetBook, useUsersAllBooks } from "@/app/store/queries";
 const Discovery = () => {
   const userId = localStorage.getItem("userId");
   const { data } = useUsersAllBooks(userId);
-
   const [genreFilter, setGenreFilter] = useState("all");
   const [authorFilter, setAuthorFilter] = useState("");
 
@@ -28,6 +27,7 @@ const Discovery = () => {
     return genreMatch && authorMatch;
   });
 
+  console.log("🚀 ~ handleAuthorChange ~ handleAuthorChange:", filteredBooks);
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="p-8">
@@ -58,7 +58,9 @@ const Discovery = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-6">
-          {filteredBooks?.map((book) => <Card key={book.id} book={book} />)}
+          {filteredBooks?.map((book) => (
+            <Card key={book.id} book={book} isExchange />
+          ))}
         </div>
       </main>
     </div>

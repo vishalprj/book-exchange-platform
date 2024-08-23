@@ -89,7 +89,9 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-6">
-          {filteredBooks?.map((book) => <Card key={book.id} book={book} />)}
+          {filteredBooks?.map((book) => (
+            <Card key={book.id} book={book} isEdit />
+          ))}
         </div>
       </main>
 

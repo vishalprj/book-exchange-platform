@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Users {
   id               String            @id @default(auto()) @map("_id") @db.ObjectId
   username         String            @unique
@@ -16,11 +15,9 @@ model Users {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   Books            Book[]            @relation("UserBooks")
-  WishList         WishList[]
   requestedBooks   ExchangeRequest[] @relation("RequesterRequests")
   ownedBooks       ExchangeRequest[] @relation("OwnerRequests")
 }
-
 
 model Book {
   id               String            @id @default(auto()) @map("_id") @db.ObjectId
@@ -30,23 +27,10 @@ model Book {
   genre            String
   status           String
   createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-
+  updatedAt        DateTime          @default(now()) @updatedAt
   user             Users             @relation("UserBooks", fields: [userId], references: [id])
-  WishList         WishList[]
   requestedIn      ExchangeRequest[] @relation("RequestedBooks")
   offeredIn        ExchangeRequest[] @relation("OfferedBooks")
-}
-
-model WishList {
-  id               String            @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String            @db.ObjectId
-  bookId           String            @db.ObjectId
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-
-  user             Users             @relation(fields: [userId], references: [id])
-  book             Book              @relation(fields: [bookId], references: [id])
 }
 
 model ExchangeRequest {
@@ -57,10 +41,13 @@ model ExchangeRequest {
   offeredBookId    String            @db.ObjectId
   status           String
   createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-
+  updatedAt        DateTime          @default(now()) @updatedAt
   requester        Users             @relation("RequesterRequests", fields: [requesterId], references: [id])
   requestedBook    Book              @relation("RequestedBooks", fields: [requestedBookId], references: [id])
   owner            Users             @relation("OwnerRequests", fields: [ownerId], references: [id])
   offeredBook      Book              @relation("OfferedBooks", fields: [offeredBookId], references: [id])
 }
+
+
+
+

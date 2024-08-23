@@ -1,0 +1,58 @@
+.exchangePage {
+  background-color: #121212;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.exchangeContainer {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #333;
+}
+
+.bookDetails {
+  margin-bottom: 15px;
+}
+
+.bookDetails h3 {
+  font-size: 1.2rem;
+  color: #03dac6;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.approveButton {
+  background-color: #03dac6;
+  color: #121212;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.approveButton:hover {
+  background-color: #02c2b2;
+}
+
+.declineButton {
+  background-color: #cf6679;
+  color: #121212;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.declineButton:hover {
+  background-color: #b85c6c;
+}
+
+.noExchanges {
+  color: #808080;
+}

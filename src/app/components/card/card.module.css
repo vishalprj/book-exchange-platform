@@ -82,3 +82,117 @@
 .deleteButton:hover {
   background-color: #0056b3;
 }
+.card {
+  background-color: #1a1a1a;
+  padding: 16px;
+  border-radius: 8px;
+  color: #fff;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details {
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #e6e6e6;
+}
+
+.author {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  color: #ccc;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.iconButton {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 8px;
+  transition: color 0.2s;
+}
+
+.iconButton:hover {
+  color: #f39c12;
+}
+
+.bookList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #2a2a2a;
+}
+
+.bookItem {
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  margin-bottom: 4px;
+}
+
+.bookItem:hover {
+  background-color: #444;
+}
+
+.selected {
+  background-color: #27ae60;
+  color: #fff;
+}
+
+.proceedButton {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.proceedButton:hover {
+  background-color: #2980b9;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .author,
+  .description {
+    font-size: 0.85rem;
+  }
+
+  .proceedButton {
+    padding: 8px 16px;
+  }
+}
