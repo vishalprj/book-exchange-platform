@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  username         String            @unique
+  email            String            @unique
+  password         String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  Books            Book[]            @relation("UserBooks")
+  requestedBooks   ExchangeRequest[] @relation("RequesterRequests")
+  ownedBooks       ExchangeRequest[] @relation("OwnerRequests")
+}
+
+model Book {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String            @db.ObjectId
+  title            String
+  author           String
+  genre            String
+  status           String
+  image            String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @default(now()) @updatedAt
+  user             Users             @relation("UserBooks", fields: [userId], references: [id])
+  requestedIn      ExchangeRequest[] @relation("RequestedBooks")
+  offeredIn        ExchangeRequest[] @relation("OfferedBooks")
+
+  @@unique([title, userId]) 
+}
+
+
+model ExchangeRequest {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  requesterId      String            @db.ObjectId
+  requestedBookId  String            @db.ObjectId
+  ownerId          String            @db.ObjectId
+  offeredBookId    String            @db.ObjectId
+  status           String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @default(now()) @updatedAt
+  requester        Users             @relation("RequesterRequests", fields: [requesterId], references: [id])
+  requestedBook    Book              @relation("RequestedBooks", fields: [requestedBookId], references: [id])
+  owner            Users             @relation("OwnerRequests", fields: [ownerId], references: [id])
+  offeredBook      Book              @relation("OfferedBooks", fields: [offeredBookId], references: [id])
+}
+
+
+
+
