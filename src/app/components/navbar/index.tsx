@@ -23,7 +23,9 @@ const Navbar = () => {
         <Link href="/discovery">
           <button className="hover:text-gray-400">List Book</button>
         </Link>
-        <button className="hover:text-gray-400">Matching</button>
+        <Link href="/match">
+          <button className="hover:text-gray-400">Matching</button>
+        </Link>
         <Link href="/exchange">
           <button className="hover:text-gray-400">Exchange Request</button>
         </Link>

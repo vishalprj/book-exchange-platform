@@ -13,7 +13,7 @@ const SignUp = () => {
     try {
       const response = await signUpUser(data);
       if (response.data) {
-        router.push("/");
+        router.push("/login");
       }
     } catch (error) {
       console.log(error);

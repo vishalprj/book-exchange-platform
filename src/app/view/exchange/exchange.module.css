@@ -3,6 +3,8 @@
   color: #ffffff;
   padding: 20px;
   border-radius: 8px;
+  width: 100vw;
+  height: 100vh;
 }
 
 .exchangeContainer {
@@ -13,46 +15,106 @@
   border: 1px solid #333;
 }
 
-.bookDetails {
-  margin-bottom: 15px;
+.bookGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.bookDetails h3 {
-  font-size: 1.2rem;
+.bookDetails {
+  flex: 1;
+  padding: 0 10px;
+}
+
+.bookHeading {
+  font-size: 1.4rem;
   color: #03dac6;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #03dac6;
+  padding-bottom: 4px;
+}
+
+.bookDetails p {
+  margin: 4px 0;
 }
 
 .buttonGroup {
   display: flex;
-  gap: 10px;
+  gap: 15px;
+  justify-content: center;
 }
 
 .approveButton {
   background-color: #03dac6;
   color: #121212;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
 .approveButton:hover {
   background-color: #02c2b2;
 }
 
-.declineButton {
-  background-color: #cf6679;
+.exchangePage {
+  background-color: #121212;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.exchangeContainer {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #333;
+}
+
+.bookGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.bookDetails {
+  flex: 1;
+  padding: 0 10px;
+}
+
+.bookHeading {
+  font-size: 1.4rem;
+  color: #03dac6;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #03dac6;
+  padding-bottom: 4px;
+}
+
+.bookDetails p {
+  margin: 4px 0;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.approveButton {
+  background-color: #03dac6;
   color: #121212;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
-.declineButton:hover {
-  background-color: #b85c6c;
-}
-
-.noExchanges {
-  color: #808080;
+.approveButton:hover {
+  background-color: #02c2b2;
 }

@@ -5,3 +5,15 @@
 :root {
   background-color: #080710;
 }
+
+.btn {
+  background-color: #03dac6;
+  color: #121212;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}

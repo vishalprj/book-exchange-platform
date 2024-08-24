@@ -26,12 +26,16 @@ model Book {
   author           String
   genre            String
   status           String
+  image            String
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @default(now()) @updatedAt
   user             Users             @relation("UserBooks", fields: [userId], references: [id])
   requestedIn      ExchangeRequest[] @relation("RequestedBooks")
   offeredIn        ExchangeRequest[] @relation("OfferedBooks")
+
+  @@unique([title, userId]) 
 }
+
 
 model ExchangeRequest {
   id               String            @id @default(auto()) @map("_id") @db.ObjectId

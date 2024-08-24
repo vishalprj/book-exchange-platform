@@ -48,8 +48,9 @@ export const useAddBook = () => {
       toast.success("Book added successfully");
       queryClient.invalidateQueries("books");
     },
-    onError: () => {
-      toast.error("Failed to added book");
+    onError: (error) => {
+      const message = error?.response?.data?.error;
+      toast.error(message);
     },
   });
 };
@@ -111,4 +112,34 @@ export const useUsersAllBooks = (userId: any) => {
 export const fetchExchangeRequest = async (userId: any) => {
   const res = await axios.post("/api/book/exchangelist", { userId });
   return res.data;
+};
+
+export const exchangeRequest = async (data: any) => {
+  const res = await axios.post("api/book/exchange", data);
+  return res.data;
+};
+
+export const exchangeRequestApproved = (data: any) => {
+  return axios.patch("/api/book/exchangebook", data);
+};
+
+export const useExchangeRequestApproved = () => {
+  return useMutation(exchangeRequestApproved, {
+    onSuccess: () => {
+      toast.success("Exchange book successfully");
+    },
+    onError: () => {
+      toast.error("Failed to exchange book");
+    },
+  });
+};
+
+// Match API
+export const fetchMatchBook = async (userId: any) => {
+  const res = await axios.post("/api/book/match", { userId });
+  return res.data;
+};
+
+export const useFetchMatchBook = (userId: any) => {
+  return useQuery(["match"], () => fetchMatchBook(userId));
 };

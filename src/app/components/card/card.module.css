@@ -1,69 +1,98 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+}
+
 .card {
-  border-radius: 8px;
+  background-color: #1a1a1a;
   padding: 16px;
+  border-radius: 8px;
+  color: #fff;
   margin-bottom: 16px;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-  color: #fff; /* White text */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 250px;
+  flex: 1;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #333;
+}
+
+.bookImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+}
+
+.card:hover .bookImage {
+  transform: scale(1.1);
+  opacity: 0.9;
 }
 
 .details {
-  margin-bottom: 16px;
+  text-align: left; /* Align text to the left */
+  margin-bottom: 12px;
+  padding: 0 10px;
+  width: 100%; /* Ensures the text block takes full width */
 }
 
 .title {
-  font-size: 1.5rem;
-  margin: 0;
+  font-size: 1.2rem; /* Decreased font size */
+  margin-bottom: 8px;
+  color: #e6e6e6;
 }
 
 .author {
-  font-size: 1.2rem;
-  margin: 8px 0;
-  color: #ccc; /* Light grey for author name */
-}
-
-.description {
   font-size: 1rem;
-  color: #aaa; /* Light grey for description */
+  margin-bottom: 4px;
+  color: #ccc;
 }
 
-.editForm {
-  margin-bottom: 16px;
-}
-
-.input,
-.textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 1rem;
-  margin-bottom: 8px;
-  border: 1px solid #555; /* Darker border for inputs */
-  border-radius: 4px;
-  font-size: 1rem;
-  background-color: #333; /* Dark background for inputs */
-  color: #fff; /* White text in inputs */
-}
-
-.textarea {
-  height: 80px;
+.genre {
+  font-size: 0.85rem;
+  color: #999;
 }
 
 .actions {
   display: flex;
-  justify-content: flex-end; /* Align icons to the right */
-  gap: 16px; /* Add some space between the icons */
+  justify-content: flex-end;
+  gap: 16px;
 }
 
 .iconButton {
-  background: none;
+  background-color: transparent;
   border: none;
+  color: #fff;
   cursor: pointer;
-  color: #007bff; /* Blue color for icons */
-  font-size: 1.5rem;
-  transition: color 0.3s;
+  font-size: 1.2rem;
+  transition: color 0.2s;
 }
 
 .iconButton:hover {
-  color: #0056b3; /* Darker blue on hover */
+  color: #f39c12;
 }
 
 .saveButton,
@@ -81,54 +110,6 @@
 .saveButton:hover,
 .deleteButton:hover {
   background-color: #0056b3;
-}
-.card {
-  background-color: #1a1a1a;
-  padding: 16px;
-  border-radius: 8px;
-  color: #fff;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.details {
-  margin-bottom: 12px;
-}
-
-.title {
-  font-size: 1.5rem;
-  margin-bottom: 8px;
-  color: #e6e6e6;
-}
-
-.author {
-  font-size: 1rem;
-  margin-bottom: 4px;
-  color: #ccc;
-}
-
-.description {
-  font-size: 0.9rem;
-  color: #999;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.iconButton {
-  background-color: transparent;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1.2rem;
-  margin-left: 8px;
-  transition: color 0.2s;
-}
-
-.iconButton:hover {
-  color: #f39c12;
 }
 
 .bookList {
@@ -181,14 +162,19 @@
 @media (max-width: 768px) {
   .card {
     padding: 12px;
+    max-width: 100%;
+  }
+
+  .imageWrapper {
+    height: 200px;
   }
 
   .title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
   }
 
   .author,
-  .description {
+  .genre {
     font-size: 0.85rem;
   }
 
