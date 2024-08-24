@@ -116,7 +116,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="p-8">
-        <h1 className="text-4xl mb-8">My Books</h1>
+        <h1 className="text-3xl mb-8">My Books</h1>
         <BookFilter
           genreFilter={genreFilter}
           authorFilter={authorFilter}

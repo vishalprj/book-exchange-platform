@@ -54,3 +54,12 @@ export type HandleApprovedType = (
   offeredBookId: string,
   offeredBookUserId: string
 ) => void;
+
+export type State = {
+  genreFilter: string;
+  authorFilter: string;
+  isModalOpen: boolean;
+  selectedBook: Book | null;
+  selectedBookId: string;
+  bookList: UserBook[];
+};

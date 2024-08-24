@@ -1,6 +1,11 @@
 import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { Book, BookRespond, ExchangeRequest } from "../types";
 
 export const loginUser = (data: { email: string; password: string }) => {
@@ -132,7 +137,7 @@ export const fetchExchangeRequest = async (userId: string) => {
     "/api/book/exchangelist",
     { userId }
   );
-  return res.data;
+  return res?.data?.data;
 };
 
 export const useFetchExchangeRequest = (userId: string) => {
@@ -158,8 +163,10 @@ export const exchangeRequestApproved = (data: Partial<ExchangeRequest>) => {
 };
 
 export const useExchangeRequestApproved = () => {
+  const queryClient = useQueryClient();
   return useMutation(exchangeRequestApproved, {
     onSuccess: () => {
+      queryClient.invalidateQueries("exchangeRequest");
       toast.success("Exchange book successfully");
     },
     onError: () => {

@@ -99,7 +99,7 @@ const Discovery = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="p-8">
-        <h1 className="text-4xl mb-8">Browse All Books</h1>
+        <h1 className="text-3xl mb-8">Browse All Books</h1>
         <BookFilter
           genreFilter={state.genreFilter}
           authorFilter={state.authorFilter}
@@ -120,7 +120,7 @@ const Discovery = () => {
       </main>
       {state.isModalOpen && (
         <Modal show={state.isModalOpen} onClose={closeModal}>
-          <h2 className={styles.modalHeader}>Select a Book to Exchange</h2>
+          <h2 className={styles.modalHeader}>Select a book to exchange</h2>
           <ul className={styles.bookList}>
             {state.bookList.map((userBook) => (
               <li

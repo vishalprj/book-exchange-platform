@@ -1,60 +1,69 @@
 .modalContainer {
   padding: 20px;
-  background-color: #1e1e1e;
+  background-color: #212121;
   color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
-  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.6);
+  max-width: 400px;
   margin: 0 auto;
 }
 
 .modalHeader {
-  font-size: 24px;
-  margin-bottom: 16px;
+  font-size: 22px;
+  margin-bottom: 20px;
   text-align: center;
   color: #ffeb3b;
+  font-weight: 600;
 }
 
 .bookList {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 300px;
+  max-height: 250px;
   overflow-y: auto;
-  border-top: 1px solid #3a3a3a;
-  border-bottom: 1px solid #3a3a3a;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
 }
 
 .bookItem {
-  padding: 12px;
-  border-bottom: 1px solid #3a3a3a;
+  padding: 15px;
+  border-bottom: 1px solid #333;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+  border-radius: 6px;
 }
 
 .bookItem:hover {
-  background-color: #333333;
+  background-color: #333;
+  transform: scale(1.02);
 }
 
 .bookItemSelected {
   background-color: #3f51b5;
+  color: #ffffff;
 }
 
 .proceedButton {
   display: block;
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
   margin-top: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .proceedButton:hover {
   background-color: #388e3c;
+  transform: scale(1.02);
 }

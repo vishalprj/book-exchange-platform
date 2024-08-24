@@ -1,8 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { ReactNode } from "react";
 import styles from "./modal.module.css";
 
-const Modal = ({ show, onClose, children }: any) => {
+export type ModelProps = {
+  show: boolean;
+  onClose: () => void;
+  children: ReactNode;
+};
+const Modal = ({ show, onClose, children }: ModelProps) => {
   if (!show) return null;
   return (
     <div className={styles.modalOverlay}>

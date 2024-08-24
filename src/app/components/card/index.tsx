@@ -2,6 +2,16 @@ import React from "react";
 import styles from "./card.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { Book } from "@/app/types";
+
+export type CardProps = {
+  book: Book;
+  isEdit?: boolean;
+  isExchange?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  onExchange?: () => void;
+};
 
 const Card = ({
   book,
@@ -10,7 +20,7 @@ const Card = ({
   onEdit,
   onDelete,
   onExchange,
-}: any) => {
+}: CardProps) => {
   return (
     <div className={styles.card}>
       <div className={styles.imageWrapper}>
@@ -20,6 +30,14 @@ const Card = ({
         <h3 className={styles.title}>{book.title}</h3>
         <p className={styles.author}>{book.author}</p>
         <p className={styles.genre}>{book.genre}</p>
+        {isExchange && (
+          <button
+            onClick={onExchange}
+            className="p-2 bg-green-600 text-white rounded hover:bg-green-500 mt-5"
+          >
+            Exchange
+          </button>
+        )}
       </div>
       {isEdit && (
         <div className={styles.actions}>
@@ -30,14 +48,6 @@ const Card = ({
             <FontAwesomeIcon icon={faTrashAlt} />
           </button>
         </div>
-      )}
-      {isExchange && (
-        <button
-          onClick={onExchange}
-          className="p-2 bg-green-600 text-white rounded hover:bg-green-500"
-        >
-          Exchange
-        </button>
       )}
     </div>
   );

@@ -1,11 +1,3 @@
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px;
-}
-
 .card {
   background-color: #1a1a1a;
   padding: 16px;
@@ -55,11 +47,11 @@
 .details {
   text-align: left;
   margin-bottom: 12px;
-  width: 100%; /* Ensures the text block takes full width */
+  width: 100%;
 }
 
 .title {
-  font-size: 1.2rem; /* Decreased font size */
+  font-size: 1.2rem;
   margin-bottom: 8px;
   color: #e6e6e6;
 }
@@ -73,6 +65,24 @@
 .genre {
   font-size: 0.85rem;
   color: #999;
+}
+
+.exchangeButton {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.exchangeButton:hover {
+  background-color: #218838;
+  transform: scale(1.05);
 }
 
 .actions {
@@ -94,70 +104,6 @@
   color: #f39c12;
 }
 
-.saveButton,
-.deleteButton {
-  margin-top: 16px;
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.saveButton:hover,
-.deleteButton:hover {
-  background-color: #0056b3;
-}
-
-.bookList {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  max-height: 200px;
-  overflow-y: auto;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 8px;
-  background-color: #2a2a2a;
-}
-
-.bookItem {
-  padding: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-  margin-bottom: 4px;
-}
-
-.bookItem:hover {
-  background-color: #444;
-}
-
-.selected {
-  background-color: #27ae60;
-  color: #fff;
-}
-
-.proceedButton {
-  background-color: #3498db;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 12px;
-  transition: background-color 0.3s;
-  width: 100%;
-}
-
-.proceedButton:hover {
-  background-color: #2980b9;
-}
-
 @media (max-width: 768px) {
   .card {
     padding: 12px;
@@ -175,9 +121,5 @@
   .author,
   .genre {
     font-size: 0.85rem;
-  }
-
-  .proceedButton {
-    padding: 8px 16px;
   }
 }
