@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Fetch other users and their books
     const usersWithBooks = await prisma.users.findMany({
       where: {
         NOT: {
@@ -37,15 +36,12 @@ export async function POST(request: NextRequest) {
     const currentUserBooks = currentUser.Books;
     const allBooks = usersWithBooks.flatMap((user) => user.Books);
 
-    // Create a set of book IDs to exclude
     const excludedBooks = new Set(currentUserBooks.map((book) => book.id));
 
-    // Match books based on title or genre, excluding certain books
     const matches = allBooks.filter((book) =>
       currentUserBooks.some(
         (userBook) =>
-          (userBook.title === book.title || userBook.genre === book.genre) &&
-          !excludedBooks.has(book.id)
+          userBook.genre === book.genre && !excludedBooks.has(book.id)
       )
     );
 

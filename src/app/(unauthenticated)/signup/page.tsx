@@ -1,4 +1,4 @@
-import SignUp from "../../view/signup";
+import SignUp from "@/app/view/signup";
 
 const Page = () => {
   return <SignUp />;

@@ -1,43 +1,60 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Book, BookRespond, ExchangeRequest } from "../types";
 
-// login user
-export const loginUser = (data: any) => {
+export const loginUser = (data: { email: string; password: string }) => {
   return axios.post("/api/users/login", data);
 };
 
-// signup user
-export const signUpUser = (data: any) => {
+export const signUpUser = (data: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
   return axios.post("/api/users/signup", data);
 };
 
-// logout user
 export const logoutUser = () => {
   return axios.get("/api/users/logout");
 };
 
-export const fetchAllBook = async (userId: any) => {
-  const res = await axios.post("/api/book/listbook", { userId });
+export const fetchAllBook = async (userId: string) => {
+  const res: AxiosResponse<BookRespond[]> = await axios.post(
+    "/api/book/listbook",
+    {
+      userId,
+    }
+  );
   if (!res.data) {
     throw new Error("Response was not ok");
   }
   return res.data;
 };
 
-//  get all books
-export const useGetBook = (userId: any) => {
-  return useQuery(["books", userId], () => fetchAllBook(userId));
+export const useGetBook = (userId: string) => {
+  return useQuery<BookRespond[], Error>(
+    ["books", userId],
+    () => fetchAllBook(userId),
+    {
+      enabled: !!userId,
+    }
+  );
 };
 
-// list all books for user only
-export const listBook = async (userId: any) => {
-  const res = await axios.post("/api/book/listbook", { userId });
+export const listBook = async (userId: string) => {
+  const res: AxiosResponse<BookRespond[]> = await axios.post(
+    "/api/book/listbook",
+    {
+      userId,
+    }
+  );
   return res.data;
 };
 
-// Add book
-export const addBook = (data: any) => {
+export const addBook = (
+  data: Omit<BookRespond, "id" | "createdAt" | "updatedAt">
+) => {
   return axios.post("/api/book/addbook", data);
 };
 
@@ -48,16 +65,14 @@ export const useAddBook = () => {
       toast.success("Book added successfully");
       queryClient.invalidateQueries("books");
     },
-    onError: (error) => {
-      const message = error?.response?.data?.error;
+    onError: (error: any) => {
+      const message = error?.response?.data?.error || "Failed to add book";
       toast.error(message);
     },
   });
 };
 
-// update book
-
-const updateBook = (data: any) => {
+const updateBook = (data: Partial<BookRespond>) => {
   return axios.put("/api/book/updatebook", data);
 };
 
@@ -69,22 +84,20 @@ export const useUpdateBook = () => {
       queryClient.invalidateQueries("books");
     },
     onError: () => {
-      toast.error("Failed to updated book");
+      toast.error("Failed to update book");
     },
   });
 };
 
-// delete book
-
-export const deleteBook = (id) => {
-  return axios.post("/api/book/deletebook", id);
+export const deleteBook = (id: string) => {
+  return axios.post("/api/book/deletebook", { id });
 };
 
 export const useDeleteBook = () => {
   const queryClient = useQueryClient();
   return useMutation(deleteBook, {
     onSuccess: () => {
-      toast.success("Book delete successfully");
+      toast.success("Book deleted successfully");
       queryClient.invalidateQueries("books");
     },
     onError: () => {
@@ -93,33 +106,54 @@ export const useDeleteBook = () => {
   });
 };
 
-// list other user all books
-
-export const fetchOtherUserAllBook = async (userId: any) => {
-  const res = await axios.post("/api/book/otherlistbook", { userId });
+export const fetchOtherUserAllBook = async (userId: string) => {
+  const res: AxiosResponse<BookRespond[]> = await axios.post(
+    "/api/book/otherlistbook",
+    { userId }
+  );
   if (!res.data) {
     throw new Error("Something went wrong");
   }
   return res.data;
 };
 
-//  get all books
-export const useUsersAllBooks = (userId: any) => {
-  return useQuery(["books", userId], () => fetchOtherUserAllBook(userId));
+export const useUsersAllBooks = (userId: string) => {
+  return useQuery<BookRespond[], Error>(
+    ["books", userId],
+    () => fetchOtherUserAllBook(userId),
+    {
+      enabled: !!userId,
+    }
+  );
 };
 
-// exchange list
-export const fetchExchangeRequest = async (userId: any) => {
-  const res = await axios.post("/api/book/exchangelist", { userId });
+export const fetchExchangeRequest = async (userId: string) => {
+  const res: AxiosResponse<ExchangeRequest[]> = await axios.post(
+    "/api/book/exchangelist",
+    { userId }
+  );
   return res.data;
 };
 
-export const exchangeRequest = async (data: any) => {
-  const res = await axios.post("api/book/exchange", data);
+export const useFetchExchangeRequest = (userId: string) => {
+  return useQuery<ExchangeRequest[], Error>(
+    ["exchangeRequest", userId],
+    () => fetchExchangeRequest(userId),
+    {
+      enabled: !!userId,
+    }
+  );
+};
+
+export const exchangeRequest = async (data: Partial<ExchangeRequest>) => {
+  const res: AxiosResponse<ExchangeRequest> = await axios.post(
+    "api/book/exchange",
+    data
+  );
   return res.data;
 };
 
-export const exchangeRequestApproved = (data: any) => {
+export const exchangeRequestApproved = (data: Partial<ExchangeRequest>) => {
   return axios.patch("/api/book/exchangebook", data);
 };
 
@@ -134,12 +168,19 @@ export const useExchangeRequestApproved = () => {
   });
 };
 
-// Match API
-export const fetchMatchBook = async (userId: any) => {
-  const res = await axios.post("/api/book/match", { userId });
+export const fetchMatchBook = async (userId: string): Promise<Book[]> => {
+  const res: AxiosResponse<Book[]> = await axios.post("/api/book/match", {
+    userId,
+  });
   return res.data;
 };
 
-export const useFetchMatchBook = (userId: any) => {
-  return useQuery(["match"], () => fetchMatchBook(userId));
+export const useFetchMatchBook = (userId: string) => {
+  return useQuery<Book[], Error>(
+    ["match", userId],
+    () => fetchMatchBook(userId),
+    {
+      enabled: !!userId,
+    }
+  );
 };

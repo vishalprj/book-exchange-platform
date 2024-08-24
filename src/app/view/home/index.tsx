@@ -2,7 +2,6 @@
 import Card from "@/app/components/card";
 import Modal from "@/app/components/model";
 import { useEffect, useState } from "react";
-import styles from "./home.module.css";
 import { useForm } from "react-hook-form";
 import {
   useAddBook,
@@ -10,19 +9,32 @@ import {
   useGetBook,
   useUpdateBook,
 } from "@/app/store/queries";
-import toast from "react-hot-toast";
+import useGetUserId from "@/app/utils/useGetUserId";
+import BookFilter from "@/app/components/filter";
+import styles from "./home.module.css";
+import { Book } from "@/app/types";
+
+type FormData = {
+  title: string;
+  author: string;
+  genre: string;
+  image: string;
+  status: string;
+};
 
 const HomePage = () => {
-  const { register, handleSubmit, reset } = useForm();
-  const userId = localStorage.getItem("userId");
-  const { data } = useGetBook(userId);
+  const { register, handleSubmit, reset } = useForm<FormData>();
+  const userId = useGetUserId();
+  const { data: books } = useGetBook(userId);
   const { mutate: addBook } = useAddBook();
   const { mutate: updateBook } = useUpdateBook();
   const { mutate: deleteBook } = useDeleteBook();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState("");
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [modalType, setModalType] = useState<"add" | "edit" | "delete" | "">(
+    ""
+  );
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const [genreFilter, setGenreFilter] = useState("all");
   const [authorFilter, setAuthorFilter] = useState("");
@@ -35,7 +47,7 @@ const HomePage = () => {
     setAuthorFilter(e.target.value);
   };
 
-  const filteredBooks = (data || []).filter((book) => {
+  const filteredBooks = (books || []).filter((book) => {
     const genreMatch =
       genreFilter === "all" ||
       book.genre.toLowerCase() === genreFilter.toLowerCase();
@@ -51,13 +63,14 @@ const HomePage = () => {
     setIsModalOpen(true);
     reset();
   };
-  const openEditBookModal = (book) => {
+
+  const openEditBookModal = (book: Book) => {
     setSelectedBook(book);
     setModalType("edit");
     setIsModalOpen(true);
   };
 
-  const openDeleteBookModal = (book) => {
+  const openDeleteBookModal = (book: Book) => {
     setSelectedBook(book);
     setModalType("delete");
     setIsModalOpen(true);
@@ -68,7 +81,7 @@ const HomePage = () => {
     setSelectedBook(null);
   };
 
-  const onSubmit = async (formData) => {
+  const onSubmit = async (formData: FormData) => {
     if (modalType === "add") {
       addBook(
         { ...formData, userId },
@@ -84,7 +97,7 @@ const HomePage = () => {
     } else if (modalType === "edit" && selectedBook) {
       updateBook({ ...formData, id: selectedBook.id });
     } else if (modalType === "delete" && selectedBook) {
-      deleteBook({ id: selectedBook.id });
+      deleteBook(selectedBook.id);
     }
     closeModal();
   };
@@ -99,44 +112,19 @@ const HomePage = () => {
       });
     }
   }, [selectedBook, modalType, reset]);
+
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="p-8">
         <h1 className="text-4xl mb-8">My Books</h1>
-        <div className="mb-4 flex flex-col sm:flex-row items-center">
-          <div className="mb-2 sm:mb-0 sm:mr-4 flex items-center">
-            <label className="mr-2 text-lg">Genre:</label>
-            <select
-              className="p-2 bg-gray-800 text-white rounded-lg border border-gray-700"
-              value={genreFilter}
-              onChange={handleGenreChange}
-            >
-              <option value="all">All</option>
-              <option value="fiction">Fiction</option>
-              <option value="non-fiction">Non-Fiction</option>
-              <option value="science">Science</option>
-              <option value="fantasy">Fantasy</option>
-            </select>
-          </div>
-
-          <div className="flex items-center sm:ml-4">
-            <label className="mr-2 text-lg">Author:</label>
-            <input
-              className="p-2 bg-gray-800 text-white rounded-lg border border-gray-700"
-              type="text"
-              placeholder="Author Name"
-              value={authorFilter}
-              onChange={handleAuthorChange}
-            />
-          </div>
-
-          <button
-            onClick={openAddBookModal}
-            className="btn ml-0 sm:ml-4 mt-4 sm:mt-0 bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg transition-colors duration-300"
-          >
-            Add New Book
-          </button>
-        </div>
+        <BookFilter
+          genreFilter={genreFilter}
+          authorFilter={authorFilter}
+          onGenreChange={handleGenreChange}
+          onAuthorChange={handleAuthorChange}
+          openAddBookModal={openAddBookModal}
+          isAddBook
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
           {filteredBooks?.map((book) => (
@@ -163,10 +151,9 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="title"
-                    {...register("title")}
+                    {...register("title", { required: true })}
                     placeholder="Title"
                     className={styles.formInput}
-                    required
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -176,10 +163,9 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="author"
-                    {...register("author")}
+                    {...register("author", { required: true })}
                     placeholder="Author"
                     className={styles.formInput}
-                    required
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -189,10 +175,9 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="genre"
-                    {...register("genre")}
+                    {...register("genre", { required: true })}
                     placeholder="Genre"
                     className={styles.formInput}
-                    required
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -202,10 +187,9 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="image"
-                    {...register("image")}
+                    {...register("image", { required: true })}
                     placeholder="Image Url"
                     className={styles.formInput}
-                    required
                   />
                 </div>
                 <button type="submit" className={styles.btn}>
@@ -225,11 +209,10 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="title"
-                    {...register("title")}
+                    {...register("title", { required: true })}
                     placeholder="Title"
                     className={styles.formInput}
                     defaultValue={selectedBook?.title}
-                    required
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -239,11 +222,10 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="author"
-                    {...register("author")}
+                    {...register("author", { required: true })}
                     placeholder="Author"
                     className={styles.formInput}
                     defaultValue={selectedBook?.author}
-                    required
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -253,11 +235,10 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="genre"
-                    {...register("genre")}
+                    {...register("genre", { required: true })}
                     placeholder="Genre"
                     className={styles.formInput}
                     defaultValue={selectedBook?.genre}
-                    required
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -267,11 +248,10 @@ const HomePage = () => {
                   <input
                     type="text"
                     id="image"
-                    {...register("image")}
+                    {...register("image", { required: true })}
                     placeholder="Image Url"
                     className={styles.formInput}
                     defaultValue={selectedBook.image}
-                    required
                   />
                 </div>
                 <button type="submit" className={styles.btn}>
@@ -285,7 +265,7 @@ const HomePage = () => {
               <h1 className="text-xl mb-4">
                 Are you sure you want to delete this book?
               </h1>
-              <button onClick={onSubmit} className="btn">
+              <button onClick={handleSubmit(onSubmit)} className={styles.btn}>
                 Confirm
               </button>
             </div>

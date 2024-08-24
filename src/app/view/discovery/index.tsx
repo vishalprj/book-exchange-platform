@@ -9,56 +9,78 @@ import {
 import Modal from "@/app/components/model";
 import styles from "./discovery.module.css";
 import toast from "react-hot-toast";
+import useGetUserId from "@/app/utils/useGetUserId";
+import BookFilter from "@/app/components/filter";
+import { Book, UserBook } from "@/app/types";
+
+type State = {
+  genreFilter: string;
+  authorFilter: string;
+  isModalOpen: boolean;
+  selectedBook: Book | null;
+  selectedBookId: string;
+  bookList: UserBook[];
+};
 
 const Discovery = () => {
-  const userId = localStorage.getItem("userId");
+  const userId = useGetUserId();
   const { data } = useUsersAllBooks(userId);
-  const [genreFilter, setGenreFilter] = useState("all");
-  const [authorFilter, setAuthorFilter] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedBook, setSelectedBook] = useState(null);
-  const [selectedBookId, setSelectedBookId] = useState("");
-  const [bookList, setBookList] = useState([]);
 
-  const handleGenreChange = (e) => {
-    setGenreFilter(e.target.value);
+  const [state, setState] = useState<State>({
+    genreFilter: "all",
+    authorFilter: "",
+    isModalOpen: false,
+    selectedBook: null,
+    selectedBookId: "",
+    bookList: [],
+  });
+
+  const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setState((prevState) => ({ ...prevState, genreFilter: e.target.value }));
   };
 
-  const handleAuthorChange = (e) => {
-    setAuthorFilter(e.target.value);
+  const handleAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState((prevState) => ({ ...prevState, authorFilter: e.target.value }));
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedBook(null);
+    setState((prevState) => ({
+      ...prevState,
+      isModalOpen: false,
+      selectedBook: null,
+    }));
   };
 
-  const handleExchangeClick = async (book) => {
-    setIsModalOpen(true);
-    const listData = await listBook(userId); // Fetch the books that the current user can offer for exchange
-    setBookList(listData);
-    setSelectedBook(book); // Set the book that the user wants to request
+  const handleExchangeClick = async (book: Book) => {
+    setState((prevState) => ({
+      ...prevState,
+      isModalOpen: true,
+      selectedBook: book,
+    }));
+    const listData = await listBook(userId);
+    setState((prevState) => ({ ...prevState, bookList: listData }));
   };
 
-  const handleBookSelection = (bookId) => {
-    setSelectedBookId(bookId); // Set the ID of the book that the user is offering for exchange
+  const handleBookSelection = (bookId: string) => {
+    setState((prevState) => ({ ...prevState, selectedBookId: bookId }));
   };
 
   const handleProceedWithExchange = async () => {
-    if (selectedBookId) {
+    const { selectedBook, selectedBookId } = state;
+    if (selectedBookId && selectedBook) {
       try {
         const data = {
-          requesterId: userId, // ID of the user making the exchange request
-          requestedBookId: selectedBook.id, // ID of the book being requested
-          ownerId: selectedBook.userId, // ID of the owner of the book being requested
-          offeredBookId: selectedBookId, // ID of the book being offered for exchange
+          requesterId: userId,
+          requestedBookId: selectedBook.id,
+          ownerId: selectedBook.userId,
+          offeredBookId: selectedBookId,
         };
-        await exchangeRequest(data); // Send the exchange request
+        await exchangeRequest(data);
         toast.success("Exchange request created successfully");
+        closeModal();
       } catch (error) {
         toast.error("Failed to create exchange request");
       }
-      setIsModalOpen(false);
     } else {
       alert("Please select a book to exchange.");
     }
@@ -66,11 +88,11 @@ const Discovery = () => {
 
   const filteredBooks = (data || []).filter((book) => {
     const genreMatch =
-      genreFilter === "all" ||
-      book.genre.toLowerCase() === genreFilter.toLowerCase();
+      state.genreFilter === "all" ||
+      book.genre.toLowerCase() === state.genreFilter.toLowerCase();
     const authorMatch = book.author
       .toLowerCase()
-      .includes(authorFilter.toLowerCase());
+      .includes(state.authorFilter.toLowerCase());
     return genreMatch && authorMatch;
   });
 
@@ -78,36 +100,15 @@ const Discovery = () => {
     <div className="min-h-screen bg-black text-white">
       <main className="p-8">
         <h1 className="text-4xl mb-8">Browse All Books</h1>
-        <div className="mb-4 flex flex-col sm:flex-row items-center">
-          <div className="mb-2 sm:mb-0 sm:mr-4 flex items-center">
-            <label className="mr-2 text-lg">Genre:</label>
-            <select
-              className="p-2 bg-gray-800 text-white rounded-lg border border-gray-700"
-              value={genreFilter}
-              onChange={handleGenreChange}
-            >
-              <option value="all">All</option>
-              <option value="fiction">Fiction</option>
-              <option value="non-fiction">Non-Fiction</option>
-              <option value="science">Science</option>
-              <option value="fantasy">Fantasy</option>
-            </select>
-          </div>
-
-          <div className="flex items-center sm:ml-4">
-            <label className="mr-2 text-lg">Author:</label>
-            <input
-              className="p-2 bg-gray-800 text-white rounded-lg border border-gray-700"
-              type="text"
-              placeholder="Author Name"
-              value={authorFilter}
-              onChange={handleAuthorChange}
-            />
-          </div>
-        </div>
+        <BookFilter
+          genreFilter={state.genreFilter}
+          authorFilter={state.authorFilter}
+          onGenreChange={handleGenreChange}
+          onAuthorChange={handleAuthorChange}
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-          {filteredBooks?.map((book) => (
+          {filteredBooks.map((book) => (
             <Card
               key={book.id}
               book={book}
@@ -117,15 +118,17 @@ const Discovery = () => {
           ))}
         </div>
       </main>
-      {isModalOpen && (
-        <Modal show={isModalOpen} onClose={closeModal}>
+      {state.isModalOpen && (
+        <Modal show={state.isModalOpen} onClose={closeModal}>
           <h2 className={styles.modalHeader}>Select a Book to Exchange</h2>
           <ul className={styles.bookList}>
-            {bookList?.map((userBook) => (
+            {state.bookList.map((userBook) => (
               <li
                 key={userBook.id}
                 className={`${styles.bookItem} ${
-                  selectedBookId === userBook.id ? styles.bookItemSelected : ""
+                  state.selectedBookId === userBook.id
+                    ? styles.bookItemSelected
+                    : ""
                 }`}
                 onClick={() => handleBookSelection(userBook.id)}
               >

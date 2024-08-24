@@ -53,9 +53,8 @@
 }
 
 .details {
-  text-align: left; /* Align text to the left */
+  text-align: left;
   margin-bottom: 12px;
-  padding: 0 10px;
   width: 100%; /* Ensures the text block takes full width */
 }
 

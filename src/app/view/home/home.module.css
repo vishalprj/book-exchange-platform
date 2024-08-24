@@ -3,9 +3,8 @@
   padding: 16px;
   margin-bottom: 16px;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-  color: #fff; /* White text */
+  color: #fff;
 }
-
 .details {
   margin-bottom: 16px;
 }
@@ -18,12 +17,12 @@
 .author {
   font-size: 1.2rem;
   margin: 8px 0;
-  color: #ccc; /* Light grey for author name */
+  color: #ccc;
 }
 
 .description {
   font-size: 1rem;
-  color: #aaa; /* Light grey for description */
+  color: #aaa;
 }
 
 .editForm {
@@ -49,21 +48,21 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end; /* Align icons to the right */
-  gap: 16px; /* Add some space between the icons */
+  justify-content: flex-end;
+  gap: 16px;
 }
 
 .iconButton {
   background: none;
   border: none;
   cursor: pointer;
-  color: #007bff; /* Blue color for icons */
+  color: #007bff;
   font-size: 1.5rem;
   transition: color 0.3s;
 }
 
 .iconButton:hover {
-  color: #0056b3; /* Darker blue on hover */
+  color: #0056b3;
 }
 
 .saveButton,
@@ -181,5 +180,3 @@
   font-size: 20px;
   cursor: pointer;
 }
-
-

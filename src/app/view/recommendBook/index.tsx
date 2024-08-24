@@ -1,11 +1,13 @@
 "use client";
 
 import Card from "@/app/components/card";
+import BookFilter from "@/app/components/filter";
 import { useFetchMatchBook } from "@/app/store/queries";
+import useGetUserId from "@/app/utils/useGetUserId";
 import { useState } from "react";
 
 const MatchPage = () => {
-  const userId = localStorage.getItem("userId");
+  const userId = useGetUserId();
   const { data } = useFetchMatchBook(userId);
   const [genreFilter, setGenreFilter] = useState("all");
   const [authorFilter, setAuthorFilter] = useState("");
@@ -32,34 +34,13 @@ const MatchPage = () => {
     <>
       <div className="min-h-screen bg-black text-white">
         <main className="p-8">
-          <h1 className="text-4xl mb-8">Match Books</h1>
-          <div className="mb-4 flex flex-col sm:flex-row items-center">
-            <div className="mb-2 sm:mb-0 sm:mr-4 flex items-center">
-              <label className="mr-2 text-lg">Genre:</label>
-              <select
-                className="p-2 bg-gray-800 text-white rounded-lg border border-gray-700"
-                value={genreFilter}
-                onChange={handleGenreChange}
-              >
-                <option value="all">All</option>
-                <option value="fiction">Fiction</option>
-                <option value="non-fiction">Non-Fiction</option>
-                <option value="science">Science</option>
-                <option value="fantasy">Fantasy</option>
-              </select>
-            </div>
-
-            <div className="flex items-center sm:ml-4">
-              <label className="mr-2 text-lg">Author:</label>
-              <input
-                className="p-2 bg-gray-800 text-white rounded-lg border border-gray-700"
-                type="text"
-                placeholder="Author Name"
-                value={authorFilter}
-                onChange={handleAuthorChange}
-              />
-            </div>
-          </div>
+          <h1 className="text-4xl mb-8">Recommend Books</h1>
+          <BookFilter
+            genreFilter={genreFilter}
+            authorFilter={authorFilter}
+            onGenreChange={handleGenreChange}
+            onAuthorChange={handleAuthorChange}
+          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
             {filteredBooks?.map((book) => (

@@ -5,21 +5,29 @@ import {
   fetchExchangeRequest,
   useExchangeRequestApproved,
 } from "@/app/store/queries";
+import { ExchangeRequest, HandleApprovedType } from "@/app/types";
 
 const ExchangePage = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<ExchangeRequest[]>([]);
   const userId = localStorage.getItem("userId");
   const { mutate: exchangeData } = useExchangeRequestApproved();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetchExchangeRequest(userId);
-      setData(res.data);
+      if (userId) {
+        try {
+          const res = await fetchExchangeRequest(userId);
+          setData(res?.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     };
+
     fetchData();
   }, [userId]);
 
-  const handleApproved = (
+  const handleApproved: HandleApprovedType = (
     requestedBookId,
     requestedBookUserId,
     offeredBookId,
@@ -27,9 +35,9 @@ const ExchangePage = () => {
   ) => {
     const payload = {
       requesterId: offeredBookUserId,
-      requestedBookId: requestedBookId,
+      requestedBookId,
       ownerId: requestedBookUserId,
-      offeredBookId: offeredBookId,
+      offeredBookId,
     };
     exchangeData(payload);
   };
@@ -44,9 +52,9 @@ const ExchangePage = () => {
             <div className={styles.bookGroup}>
               <div className={styles.bookDetails}>
                 <h3 className={styles.bookHeading}>Requested Book</h3>
-                <p>Title: {exchange?.requestedBook?.title}</p>
-                <p>Author: {exchange?.requestedBook?.author}</p>
-                <p>Genre: {exchange?.requestedBook?.genre}</p>
+                <p>Title: {exchange.requestedBook?.title}</p>
+                <p>Author: {exchange.requestedBook?.author}</p>
+                <p>Genre: {exchange.requestedBook?.genre}</p>
               </div>
 
               <div className={styles.bookDetails}>
@@ -56,25 +64,23 @@ const ExchangePage = () => {
                 <p>Genre: {exchange.offeredBook.genre}</p>
               </div>
             </div>
-            {exchange.status === "pending" ? (
-              exchange.ownerId === userId ? (
-                <div className={styles.buttonGroup}>
-                  <button
-                    className={styles.approveButton}
-                    onClick={() =>
-                      handleApproved(
-                        exchange.requestedBook.id,
-                        exchange.requestedBook.userId,
-                        exchange.offeredBook.id,
-                        exchange.offeredBook.userId
-                      )
-                    }
-                  >
-                    Approve
-                  </button>
-                  <button className={styles.declineButton}>Decline</button>
-                </div>
-              ) : null
+            {exchange.status === "pending" && exchange.ownerId === userId ? (
+              <div className={styles.buttonGroup}>
+                <button
+                  className={styles.approveButton}
+                  onClick={() =>
+                    handleApproved(
+                      exchange.requestedBook.id,
+                      exchange.requestedBook.userId,
+                      exchange.offeredBook.id,
+                      exchange.offeredBook.userId
+                    )
+                  }
+                >
+                  Approve
+                </button>
+                <button className={styles.declineButton}>Decline</button>
+              </div>
             ) : (
               <div className={styles.buttonGroup}>
                 <button className={styles.approveButton} disabled>

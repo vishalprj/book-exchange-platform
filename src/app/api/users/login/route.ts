@@ -5,8 +5,6 @@ import bcrypt from "bcryptjs";
 export async function POST(request: NextRequest) {
   const response = await request.json();
   const { username, password } = response;
-  console.log("🚀 ~ POST ~ password:", password);
-  console.log("🚀 ~ POST ~ username:", username);
 
   try {
     // checking if the user filled all the required fields
@@ -32,7 +30,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Log the hashed password from the database
-    console.log("🚀 ~ POST ~ Stored password hash:", user.password);
 
     // checking password
     const validPassword = await bcrypt.compare(password, user.password);

@@ -1,4 +1,4 @@
-import MatchPage from "@/app/view/match";
+import MatchPage from "@/app/view/recommendBook";
 
 const Page = () => {
   return <MatchPage />;

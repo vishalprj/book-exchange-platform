@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/app/store/queries";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
@@ -14,9 +15,11 @@ const Login = () => {
       const response = await loginUser(data);
       if (response.data) {
         router.push("/");
+        toast.success("User login successful!");
         localStorage.setItem("userId", response.data?.data?.id);
       }
     } catch (error) {
+      toast.error("User login failed. Please try again.");
       console.log(error);
     }
   };
