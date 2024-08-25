@@ -133,15 +133,12 @@ export const useUsersAllBooks = (userId: string) => {
 };
 
 export const fetchExchangeRequest = async (userId: string) => {
-  const res: AxiosResponse<ExchangeRequest[]> = await axios.post(
-    "/api/book/exchangelist",
-    { userId }
-  );
-  return res?.data?.data;
+  const res = await axios.post("/api/book/exchangelist", { userId });
+  return res?.data;
 };
 
 export const useFetchExchangeRequest = (userId: string) => {
-  return useQuery<ExchangeRequest[], Error>(
+  return useQuery(
     ["exchangeRequest", userId],
     () => fetchExchangeRequest(userId),
     {

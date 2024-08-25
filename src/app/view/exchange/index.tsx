@@ -11,7 +11,7 @@ const ExchangePage = () => {
   const userId = useGetUserId();
   const { data } = useFetchExchangeRequest(userId);
   const { mutate: exchangeData } = useExchangeRequestApproved();
-
+  const exchangeList = data?.data || [];
   const handleApproved: HandleApprovedType = async (
     requestedBookId,
     requestedBookUserId,
@@ -30,13 +30,12 @@ const ExchangePage = () => {
       console.log(error);
     }
   };
-
   return (
     <div className={styles.exchangePage}>
       <h1 className="text-3xl mb-8">Exchange Books</h1>
 
-      {data?.length > 0 ? (
-        data?.map((exchange: ExchangeRequest) => (
+      {exchangeList?.length > 0 ? (
+        exchangeList?.map((exchange: ExchangeRequest) => (
           <section key={exchange.id} className={styles.exchangeContainer}>
             <div className={styles.bookGroup}>
               <div className={styles.bookDetails}>
