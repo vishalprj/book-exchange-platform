@@ -105,8 +105,10 @@ export const useDeleteBook = () => {
       toast.success("Book deleted successfully");
       queryClient.invalidateQueries("books");
     },
-    onError: () => {
-      toast.error("Failed to delete book");
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.error || "Failed to delete book";
+      toast.error(errorMessage);
     },
   });
 };
