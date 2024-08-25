@@ -29,11 +29,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Log the hashed password from the database
-
     // checking password
     const validPassword = await bcrypt.compare(password, user.password);
-
 
     if (!validPassword) {
       return NextResponse.json(

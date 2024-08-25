@@ -21,6 +21,7 @@ const Login = () => {
       if (response.data) {
         router.push("/");
         toast.success("User login successful!");
+
         localStorage.setItem("userId", response.data?.data?.id);
       }
     } catch (error) {
