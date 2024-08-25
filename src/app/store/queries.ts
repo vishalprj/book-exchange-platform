@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Book, BookRespond, ExchangeRequest } from "../types";
 
-export const loginUser = (data: { email: string; password: string }) => {
+export const loginUser = (data: { username: string; password: string }) => {
   return axios.post("/api/users/login", data);
 };
 

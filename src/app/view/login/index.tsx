@@ -1,16 +1,21 @@
 "use client";
 import styles from "./login.module.css";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/app/store/queries";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
+type FormData = {
+  username: string;
+  password: string;
+};
+
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormData>();
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const response = await loginUser(data);
       if (response.data) {
@@ -31,12 +36,12 @@ const Login = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <h3>Login</h3>
-        <label htmlFor="username" className={styles.label}>
+        <label htmlFor="email" className={styles.label}>
           Username
         </label>
         <input
-          type="text"
-          placeholder="Username"
+          type="username"
+          placeholder="Enter your username"
           id="username"
           required
           {...register("username")}
@@ -48,7 +53,7 @@ const Login = () => {
         </label>
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Enter your password"
           id="password"
           required
           {...register("password")}

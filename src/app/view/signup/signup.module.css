@@ -34,7 +34,7 @@
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
-  padding: 50px 35px;
+  padding: 32px 35px;
 }
 .form * {
   font-family: "Poppins", sans-serif;
@@ -44,7 +44,7 @@
   border: none;
 }
 .form h3 {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 500;
   line-height: 42px;
   text-align: center;
@@ -89,8 +89,32 @@
   color: #ffffff;
 }
 
+.text {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 400;
+  opacity: 0.8;
+}
+.text {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 400;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 .link {
-  color: #e5e5e5;
-  font-weight: 800;
+  color: #ff8c00;
+  font-weight: 600;
   text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease-in-out;
+}
+
+.link:hover {
+  color: #23a2f6;
 }

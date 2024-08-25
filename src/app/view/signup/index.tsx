@@ -1,18 +1,28 @@
 "use client";
 import styles from "./signup.module.css";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { signUpUser } from "@/app/store/queries";
 import Link from "next/link";
 
+type FormData = {
+  username: string;
+  email: string;
+  password: string;
+};
+
 const SignUp = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormData>();
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
-    const response = await signUpUser(data);
-    if (response.data) {
-      router.push("/login");
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      const response = await signUpUser(data);
+      if (response.data) {
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error("Sign-up failed:", error);
     }
   };
 
@@ -39,7 +49,7 @@ const SignUp = () => {
           Email
         </label>
         <input
-          type="text"
+          type="email"
           placeholder="Email"
           id="email"
           required
