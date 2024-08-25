@@ -13,6 +13,7 @@ import useGetUserId from "@/app/utils/useGetUserId";
 import BookFilter from "@/app/components/filter";
 import styles from "./home.module.css";
 import { Book } from "@/app/types";
+import Spinner from "@/app/components/spinner";
 
 type FormData = {
   title: string;
@@ -25,10 +26,10 @@ type FormData = {
 const HomePage = () => {
   const { register, handleSubmit, reset } = useForm<FormData>();
   const userId = useGetUserId();
-  const { data: books } = useGetBook(userId);
-  const { mutate: addBook } = useAddBook();
-  const { mutate: updateBook } = useUpdateBook();
-  const { mutate: deleteBook } = useDeleteBook();
+  const { data: books, isLoading } = useGetBook(userId);
+  const { mutate: addBook, isLoading: isAdding } = useAddBook();
+  const { mutate: updateBook, isLoading: isUpdating } = useUpdateBook();
+  const { mutate: deleteBook, isLoading: isDeleting } = useDeleteBook();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"add" | "edit" | "delete" | "">(
@@ -113,6 +114,14 @@ const HomePage = () => {
     }
   }, [selectedBook, modalType, reset]);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="p-8">
@@ -126,17 +135,23 @@ const HomePage = () => {
           isAddBook
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-          {filteredBooks?.map((book) => (
-            <Card
-              key={book.id}
-              book={book}
-              isEdit={true}
-              onEdit={() => openEditBookModal(book)}
-              onDelete={() => openDeleteBookModal(book)}
-            />
-          ))}
-        </div>
+        {filteredBooks.length === 0 ? (
+          <p className="text-2xl mt-10 text-gray-400">
+            No books available. Please add some books.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
+            {filteredBooks.map((book) => (
+              <Card
+                key={book.id}
+                book={book}
+                isEdit={true}
+                onEdit={() => openEditBookModal(book)}
+                onDelete={() => openDeleteBookModal(book)}
+              />
+            ))}
+          </div>
+        )}
       </main>
       {isModalOpen && (
         <Modal show={isModalOpen} onClose={closeModal}>
@@ -193,7 +208,7 @@ const HomePage = () => {
                   />
                 </div>
                 <button type="submit" className={styles.btn}>
-                  Add Book
+                  {isAdding ? "Adding..." : "Add Book"}
                 </button>
               </form>
             </div>
@@ -242,8 +257,8 @@ const HomePage = () => {
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label className={styles?.formLabel} htmlFor="image">
-                    Image Url
+                  <label className={styles.formLabel} htmlFor="image">
+                    Image
                   </label>
                   <input
                     type="text"
@@ -251,23 +266,30 @@ const HomePage = () => {
                     {...register("image", { required: true })}
                     placeholder="Image Url"
                     className={styles.formInput}
-                    defaultValue={selectedBook.image}
+                    defaultValue={selectedBook?.image}
                   />
                 </div>
                 <button type="submit" className={styles.btn}>
-                  Edit Book
+                  {isUpdating ? "Updating..." : "Update Book"}
                 </button>
               </form>
             </div>
           )}
           {modalType === "delete" && selectedBook && (
             <div>
-              <h1 className="text-xl mb-4">
-                Are you sure you want to delete this book?
-              </h1>
-              <button onClick={handleSubmit(onSubmit)} className={styles.btn}>
-                Confirm
-              </button>
+              <h2 className="text-2xl mb-4">Confirm Delete</h2>
+              <p>Are you sure you want to delete</p>
+              <div className="mt-4">
+                <button
+                  onClick={() => {
+                    deleteBook(selectedBook.id);
+                    closeModal();
+                  }}
+                  className={styles.btn}
+                >
+                  {isDeleting ? "Deleting..." : "Delete Book"}
+                </button>
+              </div>
             </div>
           )}
         </Modal>

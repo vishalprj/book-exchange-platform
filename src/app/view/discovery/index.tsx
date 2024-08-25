@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import useGetUserId from "@/app/utils/useGetUserId";
 import BookFilter from "@/app/components/filter";
 import { Book, UserBook } from "@/app/types";
+import Spinner from "@/app/components/spinner";
 
 type State = {
   genreFilter: string;
@@ -24,7 +25,7 @@ type State = {
 
 const Discovery = () => {
   const userId = useGetUserId();
-  const { data } = useUsersAllBooks(userId);
+  const { data, isLoading } = useUsersAllBooks(userId);
 
   const [state, setState] = useState<State>({
     genreFilter: "all",
@@ -57,8 +58,12 @@ const Discovery = () => {
       isModalOpen: true,
       selectedBook: book,
     }));
-    const listData = await listBook(userId);
-    setState((prevState) => ({ ...prevState, bookList: listData }));
+    try {
+      const listData = await listBook(userId);
+      setState((prevState) => ({ ...prevState, bookList: listData }));
+    } catch (error) {
+      toast.error("Failed to fetch user's books");
+    }
   };
 
   const handleBookSelection = (bookId: string) => {
@@ -96,6 +101,14 @@ const Discovery = () => {
     return genreMatch && authorMatch;
   });
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="p-8">
@@ -107,16 +120,22 @@ const Discovery = () => {
           onAuthorChange={handleAuthorChange}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-          {filteredBooks.map((book) => (
-            <Card
-              key={book.id}
-              book={book}
-              isExchange
-              onExchange={() => handleExchangeClick(book)}
-            />
-          ))}
-        </div>
+        {filteredBooks.length === 0 ? (
+          <p className="text-2xl mt-10 text-gray-400">
+            No books available. Please check back later.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
+            {filteredBooks.map((book) => (
+              <Card
+                key={book.id}
+                book={book}
+                isExchange
+                onExchange={() => handleExchangeClick(book)}
+              />
+            ))}
+          </div>
+        )}
       </main>
       {state.isModalOpen && (
         <Modal show={state.isModalOpen} onClose={closeModal}>

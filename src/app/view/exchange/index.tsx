@@ -6,12 +6,14 @@ import {
 } from "@/app/store/queries";
 import { ExchangeRequest, HandleApprovedType } from "@/app/types";
 import useGetUserId from "@/app/utils/useGetUserId";
+import Spinner from "@/app/components/spinner";
 
 const ExchangePage = () => {
   const userId = useGetUserId();
-  const { data } = useFetchExchangeRequest(userId);
+  const { data, isLoading } = useFetchExchangeRequest(userId);
   const { mutate: exchangeData } = useExchangeRequestApproved();
   const exchangeList = data?.data || [];
+
   const handleApproved: HandleApprovedType = async (
     requestedBookId,
     requestedBookUserId,
@@ -27,8 +29,18 @@ const ExchangePage = () => {
     try {
       exchangeData(payload);
     } catch (error) {
+      console.error(error);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.exchangePage}>
       <h1 className="text-3xl mb-8">Exchange Books</h1>
@@ -79,7 +91,9 @@ const ExchangePage = () => {
           </section>
         ))
       ) : (
-        <p className={styles.noExchanges}>No exchange requests found.</p>
+        <p className="text-2xl mt-10 text-gray-400">
+          No exchange requests found.
+        </p>
       )}
     </div>
   );

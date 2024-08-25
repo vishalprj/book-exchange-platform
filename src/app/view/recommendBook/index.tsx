@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import Card from "@/app/components/card";
 import BookFilter from "@/app/components/filter";
 import Modal from "@/app/components/model";
@@ -10,13 +11,12 @@ import {
 import { Book, State } from "@/app/types";
 import styles from "../discovery/discovery.module.css";
 import useGetUserId from "@/app/utils/useGetUserId";
-import { useState } from "react";
 import toast from "react-hot-toast";
+import Spinner from "@/app/components/spinner";
 
 const MatchPage = () => {
   const userId = useGetUserId();
-  const { data } = useFetchMatchBook(userId);
-
+  const { data, isLoading } = useFetchMatchBook(userId);
   const [state, setState] = useState<State>({
     genreFilter: "all",
     authorFilter: "",
@@ -41,19 +41,25 @@ const MatchPage = () => {
       selectedBook: null,
     }));
   };
+
   const handleExchangeClick = async (book: Book) => {
     setState((prevState) => ({
       ...prevState,
       isModalOpen: true,
       selectedBook: book,
     }));
-    const listData = await listBook(userId);
-    setState((prevState) => ({ ...prevState, bookList: listData }));
+    try {
+      const listData = await listBook(userId);
+      setState((prevState) => ({ ...prevState, bookList: listData }));
+    } catch (error) {
+      toast.error("Failed to fetch your books for exchange.");
+    }
   };
 
   const handleBookSelection = (bookId: string) => {
     setState((prevState) => ({ ...prevState, selectedBookId: bookId }));
   };
+
   const handleProceedWithExchange = async () => {
     const { selectedBook, selectedBookId } = state;
     if (selectedBookId && selectedBook) {
@@ -71,9 +77,10 @@ const MatchPage = () => {
         toast.error("Failed to create exchange request");
       }
     } else {
-      alert("Please select a book to exchange.");
+      toast.error("Please select a book to exchange.");
     }
   };
+
   const filteredBooks = (data || []).filter((book) => {
     const genreMatch =
       state.genreFilter === "all" ||
@@ -83,6 +90,14 @@ const MatchPage = () => {
       .includes(state.authorFilter.toLowerCase());
     return genreMatch && authorMatch;
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -97,14 +112,20 @@ const MatchPage = () => {
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-            {filteredBooks?.map((book) => (
-              <Card
-                key={book.id}
-                book={book}
-                isExchange
-                onExchange={() => handleExchangeClick(book)}
-              />
-            ))}
+            {filteredBooks.length > 0 ? (
+              filteredBooks.map((book) => (
+                <Card
+                  key={book.id}
+                  book={book}
+                  isExchange
+                  onExchange={() => handleExchangeClick(book)}
+                />
+              ))
+            ) : (
+              <p className="text-center text-2xl mt-10 text-gray-400">
+                No matching books found.
+              </p>
+            )}
           </div>
         </main>
         {state.isModalOpen && (

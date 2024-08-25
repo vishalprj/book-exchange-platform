@@ -1,11 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Book, BookRespond, ExchangeRequest } from "../types";
 
 export const loginUser = (data: { email: string; password: string }) => {
