@@ -29,11 +29,11 @@ Create a .env.local file in the root of the project and add the following enviro
 
 
 ```
-DATABASE_URLL = https://api.your-backend-url.com
-MONGODB_URI=mongodb://username:password@host:port/database
-JWT_SECRET=your_jwt_secret
+DATABASE_URL=mongodb://username:password@host:port/database
 Replace the placeholders with your actual values
 ```
+
+
 
 
 ```
