@@ -6,9 +6,9 @@ type AuthWrapperProps = {
   children: ReactNode;
 };
 const AuthWrapper = ({ children }: AuthWrapperProps) => {
-  const userId = localStorage.getItem("userId");
   const router = useRouter();
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
     if (!userId) {
       router.push("/login");
     }
