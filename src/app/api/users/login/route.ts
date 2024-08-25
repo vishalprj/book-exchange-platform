@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
     // checking password
     const validPassword = await bcrypt.compare(password, user.password);
 
-    console.log("🚀 ~ POST ~ validPassword:", validPassword);
 
     if (!validPassword) {
       return NextResponse.json(
@@ -48,7 +47,6 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("🚀 ~ POST ~ Error:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

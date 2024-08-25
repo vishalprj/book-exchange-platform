@@ -27,7 +27,6 @@ const ExchangePage = () => {
     try {
       exchangeData(payload);
     } catch (error) {
-      console.log(error);
     }
   };
   return (

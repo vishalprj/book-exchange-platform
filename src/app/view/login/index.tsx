@@ -20,7 +20,6 @@ const Login = () => {
       }
     } catch (error) {
       toast.error("User login failed. Please try again.");
-      console.log(error);
     }
   };
 

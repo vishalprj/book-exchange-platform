@@ -15,13 +15,11 @@ export async function POST(request: NextRequest) {
         status: "pending",
       },
     });
-    console.log("🚀 ~ POST ~ exchangeRequest:", exchangeRequest);
     return NextResponse.json(
       { message: "Exchange request created", data: exchangeRequest },
       { status: 201 }
     );
   } catch (error) {
-    console.log("🚀 ~ POST ~ error:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

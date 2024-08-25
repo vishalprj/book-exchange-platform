@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(allBooks, { status: 200 });
   } catch (error) {
-    console.error("Error fetching users with books:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

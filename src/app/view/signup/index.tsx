@@ -10,13 +10,9 @@ const SignUp = () => {
   const router = useRouter();
 
   const onSubmit = async (data: any) => {
-    try {
-      const response = await signUpUser(data);
-      if (response.data) {
-        router.push("/login");
-      }
-    } catch (error) {
-      console.log(error);
+    const response = await signUpUser(data);
+    if (response.data) {
+      router.push("/login");
     }
   };
 
