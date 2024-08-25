@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { signUpUser } from "@/app/store/queries";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 type FormData = {
   username: string;
@@ -20,9 +21,12 @@ const SignUp = () => {
       const response = await signUpUser(data);
       if (response.data) {
         router.push("/login");
+        toast.success("User registered successfully");
       }
-    } catch (error) {
-      console.error("Sign-up failed:", error);
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to register user";
+      toast.error(errorMessage);
     }
   };
 
