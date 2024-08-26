@@ -1,12 +1,7 @@
 "use client";
 import Card from "@/app/components/card";
 import { useState } from "react";
-import {
-  exchangeRequest,
-  listBook,
-  useGetAllBooks,
-  useUsersAllBooks,
-} from "@/app/store/queries";
+import { exchangeRequest, listBook, useGetAllBooks } from "@/app/store/queries";
 import Modal from "@/app/components/model";
 import styles from "./discovery.module.css";
 import toast from "react-hot-toast";
