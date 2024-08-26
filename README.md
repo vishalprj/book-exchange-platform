@@ -50,11 +50,11 @@ npm run build
 yarn build
 ```
 **Testing Credentials**
-To test the functionality of the website, you can create a user account or Feel free to use these credentials to log in and test the features of the website
+To test the functionality of the website, you can create an account or Feel free to use these credentials to log in and test the features of the website
 This will give you access to a sample book list for your testing purposes:
 ```
-Username: vishal26 or vishal123
-Password: vishal26 or vishal123
+Username: vishal26 or vishal123 or test
+Password: vishal26 or vishal123 or test
 ```
 
 **Fork the repository.**
