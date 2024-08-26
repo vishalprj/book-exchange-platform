@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signUpUser } from "@/app/store/queries";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 type FormData = {
   username: string;
@@ -15,8 +16,10 @@ type FormData = {
 const SignUp = () => {
   const { register, handleSubmit } = useForm<FormData>();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setLoading(true);
     try {
       const response = await signUpUser(data);
       if (response.data) {
@@ -27,6 +30,8 @@ const SignUp = () => {
       const errorMessage =
         error?.response?.data?.message || "Failed to register user";
       toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +76,10 @@ const SignUp = () => {
           {...register("password")}
           className={styles.input}
         />
-        <button className={styles.button}>CREATE ACCOUNT</button>
+        <button className={styles.button} disabled={loading}>
+          {loading ? "Registering..." : "Sign Up"}
+          {loading}
+        </button>
         <p className={styles.text}>
           Already have an account?{" "}
           <Link href="/login" className={styles.link}>

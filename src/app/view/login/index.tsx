@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { loginUser } from "@/app/store/queries";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 type FormData = {
   username: string;
@@ -14,18 +15,21 @@ type FormData = {
 const Login = () => {
   const { register, handleSubmit } = useForm<FormData>();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setLoading(true);
     try {
       const response = await loginUser(data);
       if (response.data) {
         router.push("/");
         toast.success("User login successful!");
-
         localStorage.setItem("userId", response.data?.data?.id);
       }
     } catch (error) {
       toast.error("User login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,11 +41,11 @@ const Login = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <h3>Login</h3>
-        <label htmlFor="email" className={styles.label}>
+        <label htmlFor="username" className={styles.label}>
           Username
         </label>
         <input
-          type="username"
+          type="text"
           placeholder="Enter your username"
           id="username"
           required
@@ -61,7 +65,10 @@ const Login = () => {
           className={styles.input}
         />
 
-        <button className={styles.button}>LOGIN</button>
+        <button type="submit" className={styles.button} disabled={loading}>
+          {loading ? "Logging in..." : "LOGIN"}
+          {loading}
+        </button>
         <p className={styles.text}>
           New here?{" "}
           <Link href="/signup" className={styles.link}>

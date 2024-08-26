@@ -17,6 +17,7 @@ type State = {
   selectedBook: Book | null;
   selectedBookId: string;
   bookList: UserBook[];
+  loading: boolean;
 };
 
 const Discovery = () => {
@@ -30,6 +31,7 @@ const Discovery = () => {
     selectedBook: null,
     selectedBookId: "",
     bookList: [],
+    loading: false,
   });
 
   const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -53,12 +55,15 @@ const Discovery = () => {
       ...prevState,
       isModalOpen: true,
       selectedBook: book,
+      loading: true,
     }));
     try {
       const listData = await listBook(userId);
       setState((prevState) => ({ ...prevState, bookList: listData }));
     } catch (error) {
       toast.error("Failed to fetch user's books");
+    } finally {
+      setState((prevState) => ({ ...prevState, loading: false }));
     }
   };
 
@@ -136,22 +141,28 @@ const Discovery = () => {
       {state.isModalOpen && (
         <Modal show={state.isModalOpen} onClose={closeModal}>
           <h2 className={styles.modalHeader}>Select a book to exchange</h2>
-          <ul className={styles.bookList}>
-            {state.bookList.map((userBook) => (
-              <li
-                key={userBook.id}
-                className={`${styles.bookItem} ${
-                  state.selectedBookId === userBook.id
-                    ? styles.bookItemSelected
-                    : ""
-                }`}
-                onClick={() => handleBookSelection(userBook.id)}
-              >
-                <h4>{userBook.title}</h4>
-                <p>{userBook.author}</p>
-              </li>
-            ))}
-          </ul>
+          {state.loading ? (
+            <div className="flex justify-center items-center min-h-40">
+              <Spinner />
+            </div>
+          ) : (
+            <ul className={styles.bookList}>
+              {state.bookList.map((userBook) => (
+                <li
+                  key={userBook.id}
+                  className={`${styles.bookItem} ${
+                    state.selectedBookId === userBook.id
+                      ? styles.bookItemSelected
+                      : ""
+                  }`}
+                  onClick={() => handleBookSelection(userBook.id)}
+                >
+                  <h4>{userBook.title}</h4>
+                  <p>{userBook.author}</p>
+                </li>
+              ))}
+            </ul>
+          )}
           <button
             onClick={handleProceedWithExchange}
             className={styles.proceedButton}

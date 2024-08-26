@@ -1,14 +1,13 @@
 "use client";
 import { logoutUser } from "@/app/store/queries";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
   const router = useRouter();
-  const pathname = usePathname(); // Get current pathname
-
+  const pathname = usePathname();
   const handleClick = async () => {
     try {
       await logoutUser();

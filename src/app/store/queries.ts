@@ -121,7 +121,7 @@ export const fetchOtherUserAllBook = async (userId: string) => {
 
 export const useGetAllBooks = (userId: string) => {
   return useQuery<BookRespond[], Error>(
-    ["books", userId],
+    ["book", userId],
     () => fetchOtherUserAllBook(userId),
     {
       enabled: !!userId,
