@@ -119,7 +119,7 @@ export const fetchOtherUserAllBook = async (userId: string) => {
   return res.data;
 };
 
-export const useUsersAllBooks = (userId: string) => {
+export const useGetAllBooks = (userId: string) => {
   return useQuery<BookRespond[], Error>(
     ["books", userId],
     () => fetchOtherUserAllBook(userId),

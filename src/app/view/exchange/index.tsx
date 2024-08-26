@@ -41,12 +41,16 @@ const ExchangePage = () => {
     );
   }
 
+  const sortedExchangeList = [...exchangeList].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
   return (
     <div className={styles.exchangePage}>
       <h1 className="text-3xl mb-8">Exchange Books</h1>
 
-      {exchangeList?.length > 0 ? (
-        exchangeList?.map((exchange: ExchangeRequest) => (
+      {sortedExchangeList.length > 0 ? (
+        sortedExchangeList.map((exchange: ExchangeRequest) => (
           <section key={exchange.id} className={styles.exchangeContainer}>
             <div className={styles.bookGroup}>
               <div className={styles.bookDetails}>

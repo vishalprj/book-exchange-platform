@@ -30,25 +30,26 @@ const Card = ({
         <h3 className={styles.title}>{book.title}</h3>
         <p className={styles.author}>{book.author}</p>
         <p className={styles.genre}>{book.genre}</p>
-        {isExchange && (
-          <button
-            onClick={onExchange}
-            className="p-2 bg-green-600 text-white rounded hover:bg-green-500 mt-5"
-          >
-            Exchange
-          </button>
+        <div className={styles.btn_container}>
+          {isExchange && (
+            <button onClick={onExchange} className={styles.exchangeBtn}>
+              Exchange
+            </button>
+          )}
+        </div>
+      </div>
+      <div className={styles.btn_container}>
+        {isEdit && (
+          <div className={styles.actions}>
+            <button onClick={onEdit} className={styles.iconButton}>
+              <FontAwesomeIcon icon={faEdit} />
+            </button>
+            <button onClick={onDelete} className={styles.iconButton}>
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </button>
+          </div>
         )}
       </div>
-      {isEdit && (
-        <div className={styles.actions}>
-          <button onClick={onEdit} className={styles.iconButton}>
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
-          <button onClick={onDelete} className={styles.iconButton}>
-            <FontAwesomeIcon icon={faTrashAlt} />
-          </button>
-        </div>
-      )}
     </div>
   );
 };

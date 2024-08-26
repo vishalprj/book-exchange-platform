@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   exchangeRequest,
   listBook,
+  useGetAllBooks,
   useUsersAllBooks,
 } from "@/app/store/queries";
 import Modal from "@/app/components/model";
@@ -25,7 +26,7 @@ type State = {
 
 const Discovery = () => {
   const userId = useGetUserId();
-  const { data, isLoading } = useUsersAllBooks(userId);
+  const { data, isLoading } = useGetAllBooks(userId);
 
   const [state, setState] = useState<State>({
     genreFilter: "all",

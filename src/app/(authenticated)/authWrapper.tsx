@@ -12,7 +12,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     if (!userId) {
       router.push("/login");
     }
-  });
+  }, [router]);
   return <>{children}</>;
 };
 export default AuthWrapper;
