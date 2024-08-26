@@ -7,18 +7,8 @@ import styles from "./discovery.module.css";
 import toast from "react-hot-toast";
 import useGetUserId from "@/app/utils/useGetUserId";
 import BookFilter from "@/app/components/filter";
-import { Book, UserBook } from "@/app/types";
+import { Book, State, UserBook } from "@/app/types";
 import Spinner from "@/app/components/spinner";
-
-type State = {
-  genreFilter: string;
-  authorFilter: string;
-  isModalOpen: boolean;
-  selectedBook: Book | null;
-  selectedBookId: string;
-  bookList: UserBook[];
-  loading: boolean;
-};
 
 const Discovery = () => {
   const userId = useGetUserId();

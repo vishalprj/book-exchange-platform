@@ -62,4 +62,5 @@ export type State = {
   selectedBook: Book | null;
   selectedBookId: string;
   bookList: UserBook[];
+  loading: boolean;
 };
