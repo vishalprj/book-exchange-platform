@@ -141,13 +141,13 @@ const Discovery = () => {
       {state.isModalOpen && (
         <Modal show={state.isModalOpen} onClose={closeModal}>
           <h2 className={styles.modalHeader}>Select a book to exchange</h2>
-          {state.loading ? (
-            <div className="flex justify-center items-center min-h-40">
-              <Spinner />
-            </div>
-          ) : (
-            <ul className={styles.bookList}>
-              {state.bookList.map((userBook) => (
+          <ul className={styles.bookList}>
+            {state.loading ? (
+              <div className="flex justify-center items-center min-h-40">
+                <Spinner />
+              </div>
+            ) : (
+              state.bookList.map((userBook) => (
                 <li
                   key={userBook.id}
                   className={`${styles.bookItem} ${
@@ -160,9 +160,9 @@ const Discovery = () => {
                   <h4>{userBook.title}</h4>
                   <p>{userBook.author}</p>
                 </li>
-              ))}
-            </ul>
-          )}
+              ))
+            )}
+          </ul>
           <button
             onClick={handleProceedWithExchange}
             className={styles.proceedButton}

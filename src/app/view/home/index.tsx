@@ -137,7 +137,7 @@ const HomePage = () => {
 
         {filteredBooks.length === 0 ? (
           <p className="text-2xl mt-10 text-gray-400">
-            No books available. Please add some books.
+            No books available. Please add book.
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
